@@ -5,10 +5,11 @@ module.exports = {
     api: {
       version: '3.0.0',
       headers: {
-        'user-agent': 'Aluxian/electron-updates-server'
+        'user-agent': 'Aluxian/squirrel-updates-server'
       }
     }
   },
   user: 'Aluxian',
-  repo: 'Whatsie'
+  repo: 'Whatsie',
+  darwinUpdateZipPattern: /-osx-update\.zip/
 };

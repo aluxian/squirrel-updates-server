@@ -1,16 +1,17 @@
 {
-  "name": "electron-updates-server",
+  "name": "squirrel-updates-server",
   "version": "0.1.0",
-  "description": "A simple node.js server that serves Electron updates.",
+  "description": "A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases.",
   "main": "lib/server.js",
   "scripts": {
     "start": "node lib/server.js",
     "build": "babel src -d lib",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -x \"npm run build && npm start\" -w src"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Aluxian/electron-updates-server.git"
+    "url": "git+https://github.com/Aluxian/squirrel-updates-server.git"
   },
   "keywords": [
     "electron"
@@ -18,14 +19,14 @@
   "author": "Alexandru Rosianu <rosian_alex@yahoo.com> (http://www.aluxian.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Aluxian/electron-updates-server/issues"
+    "url": "https://github.com/Aluxian/squirrel-updates-server/issues"
   },
-  "homepage": "https://github.com/Aluxian/electron-updates-server#readme",
+  "homepage": "https://github.com/Aluxian/squirrel-updates-server#readme",
   "dependencies": {
     "babel-runtime": "6.3.19",
-    "bluebird": "3.2.2",
     "express": "4.13.4",
     "github4": "0.5.1",
+    "request-promise": "2.0.0",
     "semver": "5.1.0"
   },
   "devDependencies": {
