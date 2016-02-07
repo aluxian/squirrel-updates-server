@@ -11,5 +11,6 @@ module.exports = {
   },
   user: 'Aluxian',
   repo: 'Whatsie',
-  darwinUpdateZipPattern: /-osx-update\.zip/
+  darwinUpdateZipPattern: /-osx\.zip/,
+  win32ZipPattern: /-win32-portable\.zip/
 };

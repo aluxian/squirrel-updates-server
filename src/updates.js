@@ -43,6 +43,30 @@ export async function darwin(req, res) {
   res.end();
 }
 
+export async function win32_portable(req, res) {
+  const cacheValidity = 60 * 60 * 1000; // 1h
+  const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
+
+  if (!latestRelease) {
+    throw new Error('Latest release not found.');
+  }
+
+  const zipAsset = latestRelease.assets
+    .find(a => a.name.match(config.win32ZipPattern));
+
+  if (!zipAsset) {
+    throw new Error(`No asset found that matches ${config.win32ZipPattern}.`);
+  }
+
+  res.json({
+    url: zipAsset.browser_download_url,
+    name: latestRelease.name,
+    notes: latestRelease.body,
+    pub_date: latestRelease.published_at,
+    version: semver.clean(latestRelease.name)
+  });
+}
+
 export async function win32_releases(req, res) {
   const cacheValidity = 60 * 60 * 1000; // 1h
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);

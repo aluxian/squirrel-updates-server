@@ -42,11 +42,29 @@ E318ABAF1AAE36A71B53D94635FF6532F10409C6 https://github.com/atom/atom/releases/d
 9AD8EF000716113BB8E1976EBC7630E3BC2E794D https://github.com/atom/atom/releases/download/v1.4.3/atom-1.4.3-full.nupkg 89442780
 ```
 
+#### Windows Portable
+
+`GET /update/win32/portable`
+
+It will return information about the latest Windows version.
+
+Sample response:
+
+```
+{
+  "url": "https://github.com/atom/atom/releases/download/v1.4.3/atom-windows.zip",
+  "name": "1.4.3",
+  "notes": "### Notable Changes\r\n\r\n* Fixed a bug that caused...",
+  "pub_date": "2016-02-02T21:51:58Z",
+  "version": "1.4.3"
+}
+```
+
 #### Linux
 
 `GET /update/linux?pkg=<deb|rpm>&arch=<i386|amd64|x86_64>`
 
-It will return information about the latest version.
+It will return information about the latest Linux version.
 
 Sample response:
 

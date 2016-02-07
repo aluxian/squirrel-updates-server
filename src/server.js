@@ -8,6 +8,7 @@ const app = express();
 app.use(morgan('common'));
 
 app.get('/update/darwin', asyncHandler(updates.darwin));
+app.get('/update/win32/portable', asyncHandler(updates.win32_portable));
 app.get('/update/win32/RELEASES', asyncHandler(updates.win32_releases));
 app.get('/update/linux', asyncHandler(updates.linux));
 
