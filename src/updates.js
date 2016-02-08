@@ -11,7 +11,7 @@ export async function darwin(req, res) {
     throw new Error('400:Invalid version ${version}.');
   }
 
-  const cacheValidity = 60 * 60 * 1000; // 1h
+  const cacheValidity = 10 * 60 * 1000; // 10 minutes
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
 
   if (!latestRelease) {
@@ -44,7 +44,7 @@ export async function darwin(req, res) {
 }
 
 export async function win32_portable(req, res) {
-  const cacheValidity = 60 * 60 * 1000; // 1h
+  const cacheValidity = 10 * 60 * 1000; // 10 minutes
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
 
   if (!latestRelease) {
@@ -68,7 +68,7 @@ export async function win32_portable(req, res) {
 }
 
 export async function win32_releases(req, res) {
-  const cacheValidity = 60 * 60 * 1000; // 1h
+  const cacheValidity = 10 * 60 * 1000; // 10 minutes
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
 
   if (!latestRelease) {
@@ -116,7 +116,7 @@ export async function linux(req, res) {
     throw new Error(`400:Invalid pkg ${pkg}.`);
   }
 
-  const cacheValidity = 60 * 60 * 1000; // 1h
+  const cacheValidity = 10 * 60 * 1000; // 10 minutes
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
 
   if (!latestRelease) {
