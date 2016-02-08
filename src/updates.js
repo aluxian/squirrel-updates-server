@@ -18,7 +18,7 @@ export async function darwin(req, res) {
     throw new Error('Latest release not found.');
   }
 
-  const latestVersion = semver.clean(latestRelease.name);
+  const latestVersion = semver.clean(latestRelease.tag_name);
   const shouldUpdate = semver.lt(version, latestVersion);
 
   if (shouldUpdate) {
@@ -63,7 +63,7 @@ export async function win32_portable(req, res) {
     name: latestRelease.name,
     notes: latestRelease.body,
     pub_date: latestRelease.published_at,
-    version: semver.clean(latestRelease.name)
+    version: semver.clean(latestRelease.tag_name)
   });
 }
 
@@ -91,7 +91,7 @@ export async function win32_releases(req, res) {
       const version = parts[1].match(/-(\d+\.\d+\.\d+)-/)[1];
 
       const downloadPath = releasesAsset.browser_download_url
-        .replace(semver.clean(latestRelease.name), version)
+        .replace(semver.clean(latestRelease.tag_name), version)
         .replace('/RELEASES', '/');
 
       parts[1] = downloadPath + parts[1];
@@ -135,6 +135,6 @@ export async function linux(req, res) {
     name: latestRelease.name,
     notes: latestRelease.body,
     pub_date: latestRelease.published_at,
-    version: semver.clean(latestRelease.name)
+    version: semver.clean(latestRelease.tag_name)
   });
 }
