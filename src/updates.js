@@ -1,5 +1,4 @@
 import {getLatestRelease} from './github';
-import request from 'request-promise';
 import config from '../config';
 import cache from './cache';
 import semver from 'semver';
@@ -67,7 +66,9 @@ export async function win32_portable(req, res) {
   });
 }
 
-export async function win32_releases(req, res) {
+export async function win32_file(req, res) {
+  const fileName = req.params.file;
+
   const cacheValidity = 10 * 60 * 1000; // 10 minutes
   const latestRelease = await cache.get('latest-release', getLatestRelease, cacheValidity);
 
@@ -75,33 +76,19 @@ export async function win32_releases(req, res) {
     throw new Error('Latest release not found.');
   }
 
-  const releasesAsset = latestRelease.assets
-    .find(a => a.name == 'RELEASES');
+  let downloadPath = latestRelease.html_url
+    .replace('/releases/v', '/releases/download/v')
+    .replace('/releases/tag/v', '/releases/download/v');
+  downloadPath += '/' + fileName;
 
-  if (!releasesAsset) {
-    throw new Error('Asset RELEASES not found.');
+  const versionMatches = fileName.match(/\d+\.\d+\.\d+/);
+  const fileVersion = versionMatches && versionMatches[0] || null;
+
+  if (fileVersion) {
+    downloadPath = downloadPath.replace(semver.clean(latestRelease.tag_name), fileVersion);
   }
 
-  let releasesFile = await request(releasesAsset.browser_download_url);
-  releasesFile = releasesFile
-    .replace('\n\r', '\n')
-    .split('\n')
-    .map(line => {
-      const parts = line.split(' ');
-      const version = parts[1].match(/-(\d+\.\d+\.\d+)-/)[1];
-
-      const downloadPath = releasesAsset.browser_download_url
-        .replace(semver.clean(latestRelease.tag_name), version)
-        .replace('/RELEASES', '/');
-
-      parts[1] = downloadPath + parts[1];
-      return parts.join(' ');
-    })
-    .join('\n');
-
-  res.header('Content-Length', releasesFile.length);
-  res.attachment('RELEASES');
-  res.send(releasesFile);
+  res.redirect(301, downloadPath);
 }
 
 export async function linux(req, res) {

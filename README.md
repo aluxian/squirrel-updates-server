@@ -29,18 +29,16 @@ Sample response:
 
 #### Squirrel.Windows
 
-`GET /update/win32/RELEASES`
+`GET /update/win32/<file>`
 
-If you use this for Electron's AutoUpdater, exclude `/RELEASES` from the URL (Squirrel.Windows adds it automatically).
+It will redirect to the download url for that file. Usage:
 
-Sample response:
+- **Electron's AutoUpdater**: use `/update/win32`
 
-```
-338F0A3FAA64963C5C208CF5D42E149924341342 https://github.com/atom/atom/releases/download/v1.4.2/atom-1.4.2-delta.nupkg 2115015
-E6388792A25B1A8D1ADD8F444D4FD9122740DF7B https://github.com/atom/atom/releases/download/v1.4.2/atom-1.4.2-full.nupkg 89429249
-E318ABAF1AAE36A71B53D94635FF6532F10409C6 https://github.com/atom/atom/releases/download/v1.4.3/atom-1.4.3-delta.nupkg 2172629
-9AD8EF000716113BB8E1976EBC7630E3BC2E794D https://github.com/atom/atom/releases/download/v1.4.3/atom-1.4.3-full.nupkg 89442780
-```
+  The AutoUpdater will request `/update/win32/RELEASES` when checking for updates, and the server will return the latest `RELEASES` file. It will also request files (e.g. `/update/win32/atom-1.4.3-delta.nupkg`), in which case the server will redirect to the correct download url on GitHub.
+- **Squirrel.Windows Releasify**: use `/update/win32`
+
+  When it will request packages (e.g. `/update/win32/atom-1.4.3-delta.nupkg`), the server will detect the version and redirect to the download url (e.g. `https://github.com/atom/atom/releases/download/v1.4.3/atom-1.4.3-delta.nupkg`)
 
 #### Windows Portable
 

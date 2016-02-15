@@ -14,7 +14,11 @@
     "url": "git+https://github.com/Aluxian/squirrel-updates-server.git"
   },
   "keywords": [
-    "electron"
+    "electron",
+    "updates",
+    "update",
+    "server",
+    "github"
   ],
   "author": "Alexandru Rosianu <rosian_alex@yahoo.com> (http://www.aluxian.com)",
   "license": "MIT",
@@ -27,7 +31,6 @@
     "express": "4.13.4",
     "github4": "0.5.1",
     "morgan": "1.6.1",
-    "request-promise": "2.0.0",
     "semver": "5.1.0"
   },
   "devDependencies": {

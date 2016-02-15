@@ -9,7 +9,7 @@ app.use(morgan('common'));
 
 app.get('/update/darwin', asyncHandler(updates.darwin));
 app.get('/update/win32/portable', asyncHandler(updates.win32_portable));
-app.get('/update/win32/RELEASES', asyncHandler(updates.win32_releases));
+app.get('/update/win32/:file', asyncHandler(updates.win32_file));
 app.get('/update/linux', asyncHandler(updates.linux));
 
 app.listen(config.port, () => {
