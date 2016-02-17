@@ -1,14 +1,8 @@
-# squirrel-updates-server
+# Squirrel Updates Server
 
-A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases.
-It also has an endpoint for Linux.
+A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases. It also has an endpoint for Linux.
 
-## Features
-
-- requests to the GitHub API are cached
-- the server's responses don't include caching headers
-  - use a service like Cloudflare to minimise load
-  - set a page rule in Cloudflare to cache every request (for e.g. 2 hours)
+The server doesn't do any caching, and its responses don't include caching headers. Use a service like CloudFlare to cache requests and minimise load.
 
 ## Endpoints
 
