@@ -26,7 +26,9 @@ export function asyncHandler(handler) {
           error: message
         });
 
-        console.error(err.stack);
+        if (status >= 500) {
+          console.error(err.stack);
+        }
       });
   };
 }
