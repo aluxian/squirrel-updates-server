@@ -16,7 +16,10 @@ export function asyncHandler(handler) {
 
         if (message.match(/^[\d]{3}:/)) {
           message = message.substring(4).trim();
-          status = parseInt(message.substr(0, 3), 10);
+          const code = parseInt(message.substr(0, 3), 10);
+          if (!isNaN(code)) {
+            status = code;
+          }
         }
 
         res.status(status).json({
