@@ -4,17 +4,17 @@ import semver from 'semver';
 
 export async function darwin(req, res) {
   const version = req.query.version;
-  if (!semver.valid(version)) throw new Error(`400:Invalid version ${version}.`);
+  if (!semver.valid(version)) throw new Error(`400:Invalid version '${version}'.`);
 
   const latestRelease = await getLatestRelease();
-  if (!latestRelease) throw new Error('Latest release not found.');
+  if (!latestRelease) throw new Error('404:Latest release not found.');
 
   const latestVersion = semver.clean(latestRelease.tag_name);
   const shouldUpdate = semver.lt(version, latestVersion);
 
   if (shouldUpdate) {
-    const asset = latestRelease.assets.find(a => a.name.match(config.darwinUpdateZipPattern));
-    if (!asset) throw new Error(`No asset found that matches ${config.darwinUpdateZipPattern}.`);
+    const asset = latestRelease.assets.find(a => a.name.match(config.patterns.darwin.zip));
+    if (!asset) throw new Error(`404:No asset found that matches '${config.patterns.darwin.zip}'.`);
 
     res.json({
       url: asset.browser_download_url,
@@ -31,10 +31,10 @@ export async function darwin(req, res) {
 
 export async function win32_portable(req, res) {
   const latestRelease = await getLatestRelease();
-  if (!latestRelease) throw new Error('Latest release not found.');
+  if (!latestRelease) throw new Error('404:Latest release not found.');
 
-  const zipAsset = latestRelease.assets.find(a => a.name.match(config.win32ZipPattern));
-  if (!zipAsset) throw new Error(`No asset found that matches ${config.win32ZipPattern}.`);
+  const zipAsset = latestRelease.assets.find(a => a.name.match(config.patterns.win32.zip));
+  if (!zipAsset) throw new Error(`404:No asset found that matches '${config.patterns.win32.zip}'.`);
 
   res.json({
     url: zipAsset.browser_download_url,
@@ -47,10 +47,10 @@ export async function win32_portable(req, res) {
 
 export async function win32_file(req, res) {
   const fileName = req.params.file;
-  if (!fileName) throw new Error(`400:Invalid file ${fileName}.`);
+  if (!fileName) throw new Error(`400:Invalid file '${fileName}'.`);
 
   const latestRelease = await getLatestRelease();
-  if (!latestRelease) throw new Error('Latest release not found.');
+  if (!latestRelease) throw new Error('404:Latest release not found.');
 
   let downloadPath = latestRelease.html_url
     .replace('/releases/v', '/releases/download/v')
@@ -71,14 +71,14 @@ export async function linux(req, res) {
   const arch = req.query.arch || '';
   const pkg = req.query.pkg || '';
 
-  if (['i386', 'amd64', 'x86_64'].indexOf(arch) === -1) throw new Error(`400:Invalid arch ${arch}.`);
-  if (['deb', 'rpm'].indexOf(pkg) === -1) throw new Error(`400:Invalid pkg ${pkg}.`);
+  if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new Error(`400:Invalid arch '${arch}'.`);
+  if (!['deb', 'rpm'].includes(pkg)) throw new Error(`400:Invalid pkg '${pkg}'.`);
 
   const latestRelease = await getLatestRelease();
-  if (!latestRelease) throw new Error('Latest release not found.');
+  if (!latestRelease) throw new Error('404:Latest release not found.');
 
   const asset = latestRelease.assets.find(a => a.name.includes(pkg) && a.name.includes(arch));
-  if (!asset) throw new Error(`No asset found for pkg ${pkg} and arch ${arch}.`);
+  if (!asset) throw new Error(`404:No asset found for pkg '${pkg}' and arch '${arch}'.`);
 
   res.json({
     url: asset.browser_download_url,

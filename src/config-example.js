@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   port: process.env.PORT || 3000,
   github: {
     token: process.env.GITHUB_TOKEN,
@@ -11,6 +11,24 @@ module.exports = {
   },
   user: 'Aluxian',
   repo: 'Whatsie',
-  darwinUpdateZipPattern: /-osx\.zip/,
-  win32ZipPattern: /-win32-portable\.zip/
+  patterns: {
+    darwin: {
+      dmg: /-osx\.dmg/,
+      zip: /-osx\.zip/
+    },
+    win32: {
+      installer: /-win32-setup\.exe/,
+      zip: /-win32-portable\.zip/
+    },
+    linux: {
+      deb: {
+        i386: /-i386\.deb/,
+        amd64: /-amd64\.deb/
+      },
+      rpm: {
+        i386: /-i386\.rpm/,
+        x86_64: /-x86_64\.rpm/
+      }
+    }
+  }
 };
