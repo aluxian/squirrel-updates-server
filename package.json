@@ -7,7 +7,7 @@
     "start": "node lib/server.js",
     "build": "babel src -d lib",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "babel src -d lib && (babel src -w -d lib &) && sleep 2 && nodemon -w lib lib/server.js"
+    "watch": "babel src -d lib && (babel src -w -d lib &) && sleep 2 && nodemon -w src lib/server.js"
   },
   "repository": {
     "type": "git",
