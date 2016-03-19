@@ -1,6 +1,6 @@
 export default {
   port: process.env.UPDATES_PORT || 3000,
-  host: process.env.UPDATES_HOST || '127.0.0.1',
+  host: process.env.UPDATES_HOST || '0.0.0.0',
   github: {
     token: process.env.GITHUB_TOKEN,
     api: {
