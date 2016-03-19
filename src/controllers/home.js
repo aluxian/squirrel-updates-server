@@ -7,6 +7,20 @@ export async function main(req, res) {
     status: 'online',
     user: config.user,
     repo: config.repo,
-    latestRelease
+    latest: {
+      id: latestRelease.id,
+      name: latestRelease.name,
+      tag_name: latestRelease.tag_name,
+      published_at: latestRelease.published_at,
+      body: latestRelease.body,
+      assets: latestRelease.assets.map(asset => {
+        return {
+          id: asset.id,
+          name: asset.name,
+          content_type: asset.content_type,
+          browser_download_url: asset.browser_download_url
+        };
+      })
+    }
   });
 }
