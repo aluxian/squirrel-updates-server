@@ -22,6 +22,6 @@ app.get('/update/linux', asyncHandler(updateCtrl.linux));
 // Download
 app.get('/download/:platform/latest', asyncHandler(downloadCtrl.latest));
 
-app.listen(config.port, () => {
+app.listen(config.port, config.host, () => {
   console.log('Server listening on port %s.', config.port);
 });
