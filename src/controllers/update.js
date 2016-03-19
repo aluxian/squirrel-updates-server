@@ -1,4 +1,5 @@
 import {getLatestRelease} from '../components/github';
+import {getRedirect} from '../components/utils';
 import config from '../config';
 import semver from 'semver';
 
@@ -16,8 +17,13 @@ export async function darwin(req, res) {
     const asset = latestRelease.assets.find(a => a.name.match(config.patterns.darwin.zip));
     if (!asset) throw new Error(`404:No asset found that matches '${config.patterns.darwin.zip}'.`);
 
+    let downloadUrl = asset.browser_download_url;
+    if (config.privateRepo) {
+      downloadUrl = await getRedirect(downloadUrl);
+    }
+
     res.json({
-      url: asset.browser_download_url,
+      url: downloadUrl,
       name: latestRelease.name,
       notes: latestRelease.body,
       pub_date: latestRelease.published_at
@@ -36,8 +42,13 @@ export async function win32_portable(req, res) {
   const zipAsset = latestRelease.assets.find(a => a.name.match(config.patterns.win32.zip));
   if (!zipAsset) throw new Error(`404:No asset found that matches '${config.patterns.win32.zip}'.`);
 
+  let downloadUrl = zipAsset.browser_download_url;
+  if (config.privateRepo) {
+    downloadUrl = await getRedirect(downloadUrl);
+  }
+
   res.json({
-    url: zipAsset.browser_download_url,
+    url: downloadUrl,
     name: latestRelease.name,
     notes: latestRelease.body,
     pub_date: latestRelease.published_at,
@@ -64,6 +75,10 @@ export async function win32_file(req, res) {
     downloadPath = downloadPath.replace(semver.clean(latestRelease.tag_name), fileVersion);
   }
 
+  if (config.privateRepo) {
+    downloadPath = await getRedirect(downloadPath);
+  }
+
   res.redirect(301, downloadPath);
 }
 
@@ -80,8 +95,13 @@ export async function linux(req, res) {
   const asset = latestRelease.assets.find(a => a.name.includes(pkg) && a.name.includes(arch));
   if (!asset) throw new Error(`404:No asset found for pkg '${pkg}' and arch '${arch}'.`);
 
+  let downloadUrl = asset.browser_download_url;
+  if (config.privateRepo) {
+    downloadUrl = await getRedirect(downloadUrl);
+  }
+
   res.json({
-    url: asset.browser_download_url,
+    url: downloadUrl,
     name: latestRelease.name,
     notes: latestRelease.body,
     pub_date: latestRelease.published_at,

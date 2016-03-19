@@ -11,6 +11,7 @@ export default {
   },
   user: 'Aluxian',
   repo: 'Whatsie',
+  privateRepo: false,
   patterns: {
     darwin: {
       dmg: /-osx\.dmg/,

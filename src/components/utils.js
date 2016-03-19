@@ -1,3 +1,5 @@
+import request from 'request';
+
 export function asyncHandler(handler) {
   return function(req, res, next) {
     if (!handler) {
@@ -28,4 +30,16 @@ export function asyncHandler(handler) {
         }
       });
   };
+}
+
+export function getRedirect(url) {
+  return new Promise(function(resolve, reject) {
+    request({ url: url, followRedirect: false }, function(err, res) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res.headers.location);
+      }
+    });
+  });
 }
