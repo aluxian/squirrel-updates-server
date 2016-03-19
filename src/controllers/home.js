@@ -7,6 +7,7 @@ export async function main(req, res) {
     status: 'online',
     user: config.user,
     repo: config.repo,
+    generatedAt: new Date(),
     latest: {
       id: latestRelease.id,
       name: latestRelease.name,
