@@ -24,12 +24,12 @@ export default {
     },
     linux: {
       deb: {
-        i386: /-i386\.deb/,
-        amd64: /-amd64\.deb/
+        i386: /-linux-i386\.deb/,
+        amd64: /-linux-amd64\.deb/
       },
       rpm: {
-        i386: /-i386\.rpm/,
-        x86_64: /-x86_64\.rpm/
+        i386: /-linux-i386\.rpm/,
+        x86_64: /-linux-x86_64\.rpm/
       }
     }
   }
