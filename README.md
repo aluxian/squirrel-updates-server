@@ -6,6 +6,8 @@ The server doesn't do any caching, and its responses don't include caching heade
 
 ## Endpoints
 
+### /update
+
 #### Squirrel.Mac
 
 `GET /update/darwin?version=x.x.x`
@@ -70,12 +72,58 @@ Sample response:
 }
 ```
 
+### /download
+
+#### OS X
+
+`GET /download/darwin/latest`
+
+Get the download url of the latest OS X release (dmg) and redirect to that url.
+
+`GET /download/darwin/latest?zip=1`
+
+If the `zip` query parameter is truthy, the server will redirect to the zip instead of the dmg.
+
+#### Windows
+
+`GET /download/win32/latest`
+
+Get the download url of the latest Windows release (installer) and redirect to that url.
+
+`GET /download/win32/latest?zip=1`
+
+If the `zip` query parameter is truthy, the server will redirect to the portable zip instead of the installer.
+
+#### Linux
+
+`GET /download/linux/latest?pkg=<deb|rpm>&arch=<i386|amd64|x86_64>`
+
+Get the download url of the latest Linux release, for the chosen arch and package type, and redirect to that url.
+
 ## Deploy
 
-```
-git clone https://github.com/Aluxian/squirrel-updates-server.git
-cd squirrel-updates-server
-npm install
-npm run build
-npm start
-```
+1. Clone the project
+
+  ```
+  git clone https://github.com/Aluxian/squirrel-updates-server.git
+  cd squirrel-updates-server
+  ```
+2. Install dependencies
+
+  ```
+  npm install
+  ```
+
+3. Create and edit the config file
+
+  ```
+  cp src/config-example.js src/config.js
+  vim src/config.js
+  ```
+
+4. Build and start
+
+  ```
+  npm run build
+  npm start
+  ```
