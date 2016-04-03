@@ -13,20 +13,25 @@ export function asyncHandler(handler) {
         }
       })
       .catch(function(err) {
-        let message = err.message;
-        let status = 500;
+        try {
+          let message = err.message;
+          let status = 500;
 
-        if (message.match(/^[\d]{3}:/)) {
-          status = parseInt(message.substr(0, 3), 10);
-          message = message.substring(4).trim();
-        }
+          if (message.match(/^[\d]{3}:/)) {
+            status = parseInt(message.substr(0, 3), 10);
+            message = message.substring(4).trim();
+          }
 
-        res.status(status).json({
-          error: message
-        });
+          res.status(status).json({
+            error: message
+          });
 
-        if (status >= 500) {
-          console.error(err.stack);
+          if (status >= 500) {
+            console.error(err.stack);
+          }
+        } catch(ex) {
+          res.status(500).end();
+          console.error(ex);
         }
       });
   };
