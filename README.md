@@ -100,7 +100,46 @@ If the `zip` query parameter is truthy, the server will redirect to the portable
 
 Get the download url of the latest Linux release, for the chosen arch and package type, and redirect to that url.
 
-## Deploy
+### /stats
+
+See download counts for all the releases. Stats returned:
+
+- **total**: The total number of downloads (download count of every asset from every release).
+- **platforms_r**: The number of downloads for each platform. Only assets matched by one of the patterns in `config.patterns` are counted (the rest are `undetected`).
+- **versions**: The number of times each version has been downloaded. This includes every asset from every release.
+- **versions_r**: The number of times each version has been downloaded. Only assets matched by one of the patterns in `config.patterns` are counted.
+- **versions_rd**: The differences of downloads for each release, calculated from `versions_r`. Example: `delta[2.0.8] = count[2.0.8] - count[2.0.7]`.
+- **versions_rdp**: The same as `versions_rd`, but the differences are calculated as percentages.
+- **files**: The number of downloads for each file, from every asset, from every release.
+
+> Note: draft releases are always ignored.
+
+Sample response:
+
+```
+{
+  "total": 2901,
+  "platforms_r": {
+    "darwin": {
+      "dmg": 46,
+      "zip": 154,
+      "all": 200
+    }
+  },
+  "versions": {
+    "v2.0.8": 173,
+    "v2.0.7": 490
+  },
+  "files": {
+    "RELEASES": 1841,
+    "whatsie-2.0.8-delta.nupkg": 26,
+    "whatsie-2.0.8-full.nupkg": 0,
+    "whatsie-2.0.8-linux-amd64.deb": 6
+  }
+}
+```
+
+## Deployment
 
 1. Clone the project
 
