@@ -16,6 +16,10 @@ app.get('/update/darwin', asyncHandler(updateCtrl.darwin));
 app.get('/update/win32/portable', asyncHandler(updateCtrl.win32_portable));
 app.get('/update/win32/:file', asyncHandler(updateCtrl.win32_file));
 app.get('/update/linux', asyncHandler(updateCtrl.linux));
+app.get('/update/:channel/darwin', asyncHandler(updateCtrl.darwin));
+app.get('/update/:channel/win32/portable', asyncHandler(updateCtrl.win32_portable));
+app.get('/update/:channel/win32/:file', asyncHandler(updateCtrl.win32_file));
+app.get('/update/:channel/linux', asyncHandler(updateCtrl.linux));
 app.get('/download/:platform/latest', asyncHandler(downloadCtrl.latest));
 app.get('/stats', asyncHandler(statsCtrl.main));
 

@@ -4,10 +4,13 @@ import config from '../config';
 import semver from 'semver';
 
 export async function darwin(req, res) {
+  const channel = req.params.channel || 'stable';
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+
   const version = req.query.version;
   if (!semver.valid(version)) throw new Error(`400:Invalid version '${version}'.`);
 
-  const latestRelease = await getLatestRelease();
+  const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new Error('404:Latest release not found.');
 
   const latestVersion = semver.clean(latestRelease.tag_name);
@@ -36,7 +39,10 @@ export async function darwin(req, res) {
 }
 
 export async function win32_portable(req, res) {
-  const latestRelease = await getLatestRelease();
+  const channel = req.params.channel || 'stable';
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+
+  const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new Error('404:Latest release not found.');
 
   const zipAsset = latestRelease.assets.find(a => a.name.match(config.patterns.win32.zip));
@@ -57,10 +63,13 @@ export async function win32_portable(req, res) {
 }
 
 export async function win32_file(req, res) {
+  const channel = req.params.channel || 'stable';
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+
   const fileName = req.params.file;
   if (!fileName) throw new Error(`400:Invalid file '${fileName}'.`);
 
-  const latestRelease = await getLatestRelease();
+  const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new Error('404:Latest release not found.');
 
   let downloadPath = latestRelease.html_url
@@ -83,13 +92,16 @@ export async function win32_file(req, res) {
 }
 
 export async function linux(req, res) {
+  const channel = req.params.channel || 'stable';
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+
   const arch = req.query.arch || '';
   const pkg = req.query.pkg || '';
 
   if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new Error(`400:Invalid arch '${arch}'.`);
   if (!['deb', 'rpm'].includes(pkg)) throw new Error(`400:Invalid pkg '${pkg}'.`);
 
-  const latestRelease = await getLatestRelease();
+  const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new Error('404:Latest release not found.');
 
   const asset = latestRelease.assets.find(a => a.name.includes(pkg) && a.name.includes(arch));
