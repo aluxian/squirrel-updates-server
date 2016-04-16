@@ -4,7 +4,7 @@ import config from '../config';
 import semver from 'semver';
 
 export async function darwin(req, res) {
-  const channel = req.params.channel || 'stable';
+  const channel = req.params.channel || 'dev';
   if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
 
   const version = req.query.version;
@@ -39,7 +39,7 @@ export async function darwin(req, res) {
 }
 
 export async function win32_portable(req, res) {
-  const channel = req.params.channel || 'stable';
+  const channel = req.params.channel || 'dev';
   if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
 
   const latestRelease = await getLatestRelease(channel);
@@ -63,7 +63,7 @@ export async function win32_portable(req, res) {
 }
 
 export async function win32_file(req, res) {
-  const channel = req.params.channel || 'stable';
+  const channel = req.params.channel || 'dev';
   if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
 
   const fileName = req.params.file;
@@ -92,7 +92,7 @@ export async function win32_file(req, res) {
 }
 
 export async function linux(req, res) {
-  const channel = req.params.channel || 'stable';
+  const channel = req.params.channel || 'dev';
   if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
 
   const arch = req.query.arch || '';
