@@ -1,5 +1,5 @@
 export default {
-  port: process.env.UPDATES_PORT || 3000,
+  port: process.env.UPDATES_PORT || process.env.PORT || 3000,
   host: process.env.UPDATES_HOST || '0.0.0.0',
   github: {
     token: process.env.GITHUB_TOKEN,
@@ -10,8 +10,8 @@ export default {
       }
     }
   },
-  user: 'Aluxian',
-  repo: 'Whatsie',
+  user: process.env.REPO_OWNER || 'Aluxian',
+  repo: process.env.REPO_NAME || 'Whatsie',
   privateRepo: false,
   patterns: {
     darwin: {
