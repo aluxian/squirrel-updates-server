@@ -4,11 +4,12 @@
   "description": "A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases.",
   "main": "lib/server.js",
   "scripts": {
+    "prestart": "npm run build",
     "start": "node lib/server.js",
     "build": "babel src -d lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "babel src -d lib && (babel src -w -d lib &) && sleep 2 && nodemon -w src lib/server.js",
-    "postinstall": "cp src/config-example.js src/config.js && npm run build"
+    "postinstall": "cp src/config-example.js src/config.js"
   },
   "repository": {
     "type": "git",
