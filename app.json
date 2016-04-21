@@ -1,7 +1,0 @@
-{
-  "scripts": {
-    "dokku": {
-      "postdeploy": "cp src/config-example.js src/config.js"
-    }
-  }
-}
