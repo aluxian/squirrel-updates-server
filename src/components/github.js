@@ -71,7 +71,7 @@ export function getAllReleases() {
   });
 }
 
-export function getLatestRelease(channel) {
+export function getLatestRelease(channel = 'dev') {
   if (channel == 'dev') {
     return new Promise(function(resolve, reject) {
       github.repos.getLatestRelease({
