@@ -1,5 +1,4 @@
-import {getLatestRelease} from '../components/github';
-import {getRedirect} from '../components/utils';
+import {getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 
 export async function latest(req, res) {
@@ -38,11 +37,9 @@ export async function latest(req, res) {
   asset = latestRelease.assets.find(a => a.name.match(pattern));
   if (!asset) throw new Error(`404:No asset found that matches '${pattern}'.`);
 
-  let downloadUrl = null;
+  let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {
-    downloadUrl = await getRedirect(asset.url);
-  } else {
-    downloadUrl = asset.browser_download_url;
+    downloadUrl = await getPublicDownloadUrl(asset.url);
   }
 
   res.redirect(301, downloadUrl);

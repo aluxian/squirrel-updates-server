@@ -1,5 +1,4 @@
-import {getLatestRelease} from '../components/github';
-import {getRedirect} from '../components/utils';
+import {getReleaseByTag, getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 import semver from 'semver';
 
@@ -20,11 +19,9 @@ export async function darwin(req, res) {
     const asset = latestRelease.assets.find(a => a.name.match(config.patterns.darwin.zip));
     if (!asset) throw new Error(`404:No asset found that matches '${config.patterns.darwin.zip}'.`);
 
-    let downloadUrl = null;
+    let downloadUrl = asset.browser_download_url;
     if (config.privateRepo) {
-      downloadUrl = await getRedirect(asset.url);
-    } else {
-      downloadUrl = asset.browser_download_url;
+      downloadUrl = await getPublicDownloadUrl(asset.url);
     }
 
     res.json({
@@ -50,11 +47,9 @@ export async function win32_portable(req, res) {
   const zipAsset = latestRelease.assets.find(a => a.name.match(config.patterns.win32.zip));
   if (!zipAsset) throw new Error(`404:No asset found that matches '${config.patterns.win32.zip}'.`);
 
-  let downloadUrl = null;
+  let downloadUrl = zipAsset.browser_download_url;
   if (config.privateRepo) {
-    downloadUrl = await getRedirect(zipAsset.url);
-  } else {
-    downloadUrl = zipAsset.browser_download_url;
+    downloadUrl = await getPublicDownloadUrl(zipAsset.url);
   }
 
   res.json({
@@ -73,26 +68,29 @@ export async function win32_file(req, res) {
   const fileName = req.params.file;
   if (!fileName) throw new Error(`400:Invalid file '${fileName}'.`);
 
-  const latestRelease = await getLatestRelease(channel);
-  if (!latestRelease) throw new Error('404:Latest release not found.');
-
-  let downloadPath = latestRelease.html_url
-    .replace('/releases/v', '/releases/download/v')
-    .replace('/releases/tag/v', '/releases/download/v');
-  downloadPath += '/' + fileName;
-
-  const versionMatches = fileName.match(/\d+\.\d+\.\d+/);
-  const fileVersion = versionMatches && versionMatches[0] || null;
+  // Try to guess the file version
+  const fileVersion = (fileName.match(/\d+\.\d+\.\d+/) || [])[0] || null;
+  let release = null;
 
   if (fileVersion) {
-    downloadPath = downloadPath.replace(semver.clean(latestRelease.tag_name), fileVersion);
+    // Find the release and download from it
+    release = await getReleaseByTag('v' + fileVersion);
+    if (!release) throw new Error(`404:Release not found for version '${fileVersion}'.`);
+  } else {
+    // Download from the latest release
+    release = await getLatestRelease(channel);
+    if (!release) throw new Error('404:Latest release not found.');
   }
 
+  const asset = release.assets.find(a => a.name === fileName);
+  if (!asset) throw new Error('404:Asset not found.');
+
+  let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {
-    downloadPath = await getRedirect(downloadPath);
+    downloadUrl = await getPublicDownloadUrl(asset.url);
   }
 
-  res.redirect(301, downloadPath);
+  res.redirect(301, downloadUrl); // fix status code?
 }
 
 export async function linux(req, res) {
@@ -111,11 +109,9 @@ export async function linux(req, res) {
   const asset = latestRelease.assets.find(a => a.name.includes(pkg) && a.name.includes(arch));
   if (!asset) throw new Error(`404:No asset found for pkg '${pkg}' and arch '${arch}'.`);
 
-  let downloadUrl = null;
+  let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {
-    downloadUrl = await getRedirect(asset.url);
-  } else {
-    downloadUrl = asset.browser_download_url;
+    downloadUrl = await getPublicDownloadUrl(asset.url);
   }
 
   res.json({

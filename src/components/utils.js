@@ -1,6 +1,3 @@
-import request from 'request';
-import config from '../config';
-
 export function asyncHandler(handler) {
   return function(req, res, next) {
     if (!handler) {
@@ -36,25 +33,4 @@ export function asyncHandler(handler) {
         }
       });
   };
-}
-
-export function getRedirect(url) {
-  return new Promise(function(resolve, reject) {
-    let options = {
-      url: url,
-      followRedirect: false,
-      headers: {
-        'Authorization': `token ${config.github.token}`,
-        'Accept': 'application/octet-stream',
-        'User-Agent': config.github.api.headers['user-agent']
-      }
-    };
-    request(options, function(err, res, body) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res.headers.location);
-      }
-    });
-  });
 }

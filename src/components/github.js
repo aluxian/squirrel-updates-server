@@ -1,5 +1,6 @@
 import GitHubApi from 'github4';
 import config from '../config';
+import request from 'request';
 
 const github = new GitHubApi(config.github.api);
 if (config.github.token) {
@@ -71,6 +72,19 @@ export function getAllReleases() {
   });
 }
 
+export function getReleaseByTag(tag) {
+  return new Promise(function(resolve, reject) {
+    github.repos.getReleaseByTag({
+      user: config.user,
+      repo: config.repo,
+      tag: tag
+    }, function(err, release) {
+      if (err) reject(err);
+      else resolve(release);
+    });
+  });
+}
+
 export function getLatestRelease(channel = 'dev') {
   if (channel == 'dev') {
     return new Promise(function(resolve, reject) {
@@ -88,6 +102,25 @@ export function getLatestRelease(channel = 'dev') {
     getLatestReleaseForChannel(channel, 1, function(err, release) {
       if (err) reject(err);
       else resolve(release);
+    });
+  });
+}
+
+export function getPublicDownloadUrl(url) {
+  return new Promise(function(resolve, reject) {
+    const options = {
+      url: url,
+      followRedirect: false,
+      headers: {
+        'Authorization': `token ${config.github.token}`,
+        'Accept': 'application/octet-stream',
+        'User-Agent': config.github.api.headers['user-agent']
+      }
+    };
+
+    request(options, function(err, res) {
+      if (err) reject(err);
+      else resolve(res.headers.location);
     });
   });
 }
