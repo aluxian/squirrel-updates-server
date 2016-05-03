@@ -156,13 +156,13 @@ Sample response:
 3. Create and edit the config file
 
   ```
-  cp src/config-example.js src/config.js
+  cp src/config-example.js src/config.js # this is now done automatically by npm install
   vim src/config.js
   ```
 
 4. Build and start
 
   ```
-  npm run build
+  npm run build # this is now done automatically by npm start
   npm start
   ```
