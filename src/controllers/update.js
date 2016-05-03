@@ -90,7 +90,7 @@ export async function win32_file(req, res) {
     downloadUrl = await getPublicDownloadUrl(asset.url);
   }
 
-  res.redirect(301, downloadUrl); // fix status code?
+  res.redirect(302, downloadUrl);
 }
 
 export async function linux(req, res) {
