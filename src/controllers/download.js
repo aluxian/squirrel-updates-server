@@ -38,9 +38,11 @@ export async function latest(req, res) {
   asset = latestRelease.assets.find(a => a.name.match(pattern));
   if (!asset) throw new Error(`404:No asset found that matches '${pattern}'.`);
 
-  let downloadUrl = asset.browser_download_url;
+  let downloadUrl = null;
   if (config.privateRepo) {
-    downloadUrl = await getRedirect(downloadUrl);
+    downloadUrl = await getRedirect(asset.url);
+  } else {
+    downloadUrl = asset.browser_download_url;
   }
 
   res.redirect(301, downloadUrl);
