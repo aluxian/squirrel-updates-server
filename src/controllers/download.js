@@ -42,5 +42,5 @@ export async function latest(req, res) {
     downloadUrl = await getPublicDownloadUrl(asset.url);
   }
 
-  res.redirect(301, downloadUrl);
+  res.redirect(302, downloadUrl);
 }
