@@ -8,6 +8,11 @@ import * as updateCtrl from './controllers/update';
 import * as downloadCtrl from './controllers/download';
 import * as statsCtrl from './controllers/stats';
 
+// Import New Relic if it's set up
+if (process.env.NEW_RELIC_LICENSE_KEY) {
+  require('newrelic');
+}
+
 const app = express();
 app.use(morgan('common'));
 
