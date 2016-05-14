@@ -12,7 +12,7 @@ export default {
   },
   user: process.env.REPO_OWNER || 'Aluxian',
   repo: process.env.REPO_NAME || 'Whatsie',
-  privateRepo: false,
+  privateRepo: process.env.UPDATES_PRIVATE_REPO || false,
   patterns: {
     darwin: {
       dmg: /-osx\.dmg/,
