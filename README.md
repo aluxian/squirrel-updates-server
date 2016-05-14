@@ -156,7 +156,6 @@ Sample response:
 3. Create and edit the config file
 
   ```
-  cp src/config-example.js src/config.js # this is now done automatically by npm install
   vim src/config.js
   ```
 
