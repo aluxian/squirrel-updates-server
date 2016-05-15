@@ -39,6 +39,7 @@
     "github4": "0.6.0",
     "morgan": "1.7.0",
     "newrelic": "1.27.2",
+    "numeral": "1.5.3",
     "request": "2.72.0",
     "semver": "5.1.0"
   },
