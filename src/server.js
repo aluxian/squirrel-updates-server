@@ -1,3 +1,8 @@
+// Import New Relic if it's set up
+if (process.env.NEW_RELIC_LICENSE_KEY) {
+  require('newrelic');
+}
+
 import {asyncHandler} from './components/utils';
 import config from './config';
 import express from 'express';
@@ -7,11 +12,6 @@ import * as homeCtrl from './controllers/home';
 import * as updateCtrl from './controllers/update';
 import * as downloadCtrl from './controllers/download';
 import * as statsCtrl from './controllers/stats';
-
-// Import New Relic if it's set up
-if (process.env.NEW_RELIC_LICENSE_KEY) {
-  require('newrelic');
-}
 
 const app = express();
 app.use(morgan('common'));
