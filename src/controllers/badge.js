@@ -1,5 +1,7 @@
-import stats from '../components/stats';
+import request from 'request';
 import numeral from 'numeral';
+
+import stats from '../components/stats';
 
 export async function main(req, res) {
   const type = req.params.type;
@@ -9,5 +11,5 @@ export async function main(req, res) {
   const count = numeral(allStats.platforms_r.all).format('0.0a');
   const link = 'https://img.shields.io/badge/downloads-' + count + '-brightgreen.svg';
 
-  res.redirect(302, link);
+  request(link).pipe(res);
 }
