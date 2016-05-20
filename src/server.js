@@ -1,8 +1,3 @@
-// Import New Relic if it's set up
-if (process.env.NEW_RELIC_LICENSE_KEY) {
-  require('newrelic');
-}
-
 import {asyncHandler} from './components/utils';
 import config from './config';
 import express from 'express';

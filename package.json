@@ -5,7 +5,7 @@
   "main": "lib/server.js",
   "scripts": {
     "prestart": "npm run build",
-    "start": "node lib/server.js",
+    "start": "node lib/init.js",
     "build": "babel src -d lib",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "babel src -d lib && (babel src -w -d lib &) && sleep 2 && nodemon -w src lib/server.js"
