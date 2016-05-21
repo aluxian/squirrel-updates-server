@@ -10,6 +10,9 @@ export default {
       }
     }
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN
+  },
   user: process.env.REPO_OWNER || 'Aluxian',
   repo: process.env.REPO_NAME || 'Whatsie',
   privateRepo: process.env.UPDATES_PRIVATE_REPO || false,

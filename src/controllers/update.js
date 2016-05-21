@@ -1,23 +1,26 @@
+import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from '../errors/NotFoundError';
+
 import {getReleaseByTag, getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 import semver from 'semver';
 
 export async function darwin(req, res) {
   const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const version = req.query.version;
-  if (!semver.valid(version)) throw new Error(`400:Invalid version '${version}'.`);
+  if (!semver.valid(version)) throw new BadRequestError(`Invalid version '${version}'.`);
 
   const latestRelease = await getLatestRelease(channel);
-  if (!latestRelease) throw new Error('404:Latest release not found.');
+  if (!latestRelease) throw new NotFoundError('Latest release not found.');
 
   const latestVersion = semver.clean(latestRelease.tag_name);
   const shouldUpdate = semver.lt(version, latestVersion);
 
   if (shouldUpdate) {
     const asset = latestRelease.assets.find(a => a.name.match(config.patterns.darwin.zip));
-    if (!asset) throw new Error(`404:No asset found that matches '${config.patterns.darwin.zip}'.`);
+    if (!asset) throw new NotFoundError(`No asset found that matches '${config.patterns.darwin.zip}'.`);
 
     let downloadUrl = asset.browser_download_url;
     if (config.privateRepo) {
@@ -39,13 +42,13 @@ export async function darwin(req, res) {
 
 export async function win32_portable(req, res) {
   const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const latestRelease = await getLatestRelease(channel);
-  if (!latestRelease) throw new Error('404:Latest release not found.');
+  if (!latestRelease) throw new NotFoundError('Latest release not found.');
 
   const zipAsset = latestRelease.assets.find(a => a.name.match(config.patterns.win32.zip));
-  if (!zipAsset) throw new Error(`404:No asset found that matches '${config.patterns.win32.zip}'.`);
+  if (!zipAsset) throw new NotFoundError(`No asset found that matches '${config.patterns.win32.zip}'.`);
 
   let downloadUrl = zipAsset.browser_download_url;
   if (config.privateRepo) {
@@ -63,10 +66,10 @@ export async function win32_portable(req, res) {
 
 export async function win32_file(req, res) {
   const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const fileName = req.params.file;
-  if (!fileName) throw new Error(`400:Invalid file '${fileName}'.`);
+  if (!fileName) throw new BadRequestError(`Invalid file '${fileName}'.`);
 
   // Try to guess the file version
   const fileVersion = (fileName.match(/\d+\.\d+\.\d+/) || [])[0] || null;
@@ -75,15 +78,15 @@ export async function win32_file(req, res) {
   if (fileVersion) {
     // Find the release and download from it
     release = await getReleaseByTag('v' + fileVersion);
-    if (!release) throw new Error(`404:Release not found for version '${fileVersion}'.`);
+    if (!release) throw new NotFoundError(`Release not found for version '${fileVersion}'.`);
   } else {
     // Download from the latest release
     release = await getLatestRelease(channel);
-    if (!release) throw new Error('404:Latest release not found.');
+    if (!release) throw new NotFoundError('Latest release not found.');
   }
 
   const asset = release.assets.find(a => a.name === fileName);
-  if (!asset) throw new Error('404:Asset not found.');
+  if (!asset) throw new NotFoundError('Asset not found.');
 
   let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {
@@ -95,19 +98,19 @@ export async function win32_file(req, res) {
 
 export async function linux(req, res) {
   const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new Error(`400:Invalid channel '${channel}'.`);
+  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const arch = req.query.arch || '';
   const pkg = req.query.pkg || '';
 
-  if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new Error(`400:Invalid arch '${arch}'.`);
-  if (!['deb', 'rpm'].includes(pkg)) throw new Error(`400:Invalid pkg '${pkg}'.`);
+  if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new BadRequestError(`Invalid arch '${arch}'.`);
+  if (!['deb', 'rpm'].includes(pkg)) throw new BadRequestError(`Invalid pkg '${pkg}'.`);
 
   const latestRelease = await getLatestRelease(channel);
-  if (!latestRelease) throw new Error('404:Latest release not found.');
+  if (!latestRelease) throw new NotFoundError('Latest release not found.');
 
   const asset = latestRelease.assets.find(a => a.name.includes(pkg) && a.name.includes(arch));
-  if (!asset) throw new Error(`404:No asset found for pkg '${pkg}' and arch '${arch}'.`);
+  if (!asset) throw new NotFoundError(`No asset found for pkg '${pkg}' and arch '${arch}'.`);
 
   let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {

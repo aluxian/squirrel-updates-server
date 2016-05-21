@@ -1,21 +1,24 @@
+import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from '../errors/NotFoundError';
+
 import {getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 
 export async function latest(req, res) {
   const platform = req.params.platform;
-  if (!['darwin', 'win32', 'linux'].includes(platform)) throw new Error(`400:Invalid platform '${platform}'.`);
+  if (!['darwin', 'win32', 'linux'].includes(platform)) throw new BadRequestError(`Invalid platform '${platform}'.`);
 
   const preferZip = req.query.zip; // darwin or win32
   const arch = req.query.arch;
   const pkg = req.query.pkg;
 
   if (platform === 'linux') {
-    if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new Error(`400:Invalid arch '${arch}'.`);
-    if (!['deb', 'rpm'].includes(pkg)) throw new Error(`400:Invalid pkg '${pkg}'.`);
+    if (!['i386', 'amd64', 'x86_64'].includes(arch)) throw new BadRequestError(`Invalid arch '${arch}'.`);
+    if (!['deb', 'rpm'].includes(pkg)) throw new BadRequestError(`Invalid pkg '${pkg}'.`);
   }
 
   const latestRelease = await getLatestRelease();
-  if (!latestRelease) throw new Error('404:Latest release not found.');
+  if (!latestRelease) throw new NotFoundError('Latest release not found.');
 
   let asset = null;
   let pattern = null;
@@ -35,7 +38,7 @@ export async function latest(req, res) {
   }
 
   asset = latestRelease.assets.find(a => a.name.match(pattern));
-  if (!asset) throw new Error(`404:No asset found that matches '${pattern}'.`);
+  if (!asset) throw new NotFoundError(`No asset found that matches '${pattern}'.`);
 
   let downloadUrl = asset.browser_download_url;
   if (config.privateRepo) {

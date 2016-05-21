@@ -1,7 +1,9 @@
-import {asyncHandler} from './components/utils';
-import config from './config';
 import express from 'express';
 import morgan from 'morgan';
+import raven from 'raven';
+
+import {asyncHandler, errorHandler1, errorHandler2} from './components/utils';
+import config from './config';
 
 import * as homeCtrl from './controllers/home';
 import * as updateCtrl from './controllers/update';
@@ -10,7 +12,11 @@ import * as statsCtrl from './controllers/stats';
 import * as badgeCtrl from './controllers/badge';
 
 const app = express();
+
 app.use(morgan('common'));
+if (config.sentry.dsn) {
+  app.use(raven.middleware.express.requestHandler(config.sentry.dsn));
+}
 
 app.get('/', asyncHandler(homeCtrl.main));
 app.get('/update/darwin', asyncHandler(updateCtrl.darwin));
@@ -24,6 +30,12 @@ app.get('/update/:channel/linux', asyncHandler(updateCtrl.linux));
 app.get('/download/:platform/latest', asyncHandler(downloadCtrl.latest));
 app.get('/stats', asyncHandler(statsCtrl.main));
 app.get('/badge/:type.svg', asyncHandler(badgeCtrl.main));
+
+app.use(errorHandler1);
+if (config.sentry.dsn) {
+  app.use(raven.middleware.express.errorHandler(config.sentry.dsn));
+}
+app.use(errorHandler2);
 
 app.listen(config.port, config.host, () => {
   console.log('Server listening on port %s.', config.port);
