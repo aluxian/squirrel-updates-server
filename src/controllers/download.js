@@ -1,6 +1,7 @@
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 
+import {downloadMirror} from '../components/mirrors';
 import {getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 
@@ -46,4 +47,22 @@ export async function latest(req, res) {
   }
 
   res.redirect(302, downloadUrl);
+}
+
+export async function latestMirror(req, res) {
+  const mirror = req.params.mirror;
+  const mirrors = (config.mirrors || '').split(',');
+  if (!mirrors.includes(mirror)) throw new NotFoundError(`Mirror '${mirror}' not found.`);
+
+  const platform = req.query.platform;
+  if (!['win32'].includes(platform)) throw new BadRequestError(`Invalid platform '${platform}'.`);
+
+  const mirrorUrl = process.env['MIRROR_URL_' + mirror.toUpperCase()];
+  const headers = {
+    'x-forwarded-for': req.get('x-forwarded-for') || req.connection.remoteAddress,
+    'user-agent': req.get('user-agent')
+  };
+  const response = await downloadMirror(mirrorUrl, platform, headers);
+
+  res.redirect(302, response.download_link);
 }

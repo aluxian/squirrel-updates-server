@@ -35,5 +35,6 @@ export default {
         x86_64: /-linux-x86_64\.rpm/
       }
     }
-  }
+  },
+  mirrors: process.env.MIRROR_NAMES
 };
