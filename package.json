@@ -1,6 +1,6 @@
 {
   "name": "squirrel-updates-server",
-  "version": "0.4.1",
+  "version": "0.5.1",
   "description": "A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases.",
   "main": "index.js",
   "scripts": {
