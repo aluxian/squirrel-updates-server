@@ -1,5 +1,7 @@
 # Squirrel Updates Server
 
+[![aluxian/squirrel-updates-server](http://dockeri.co/image/aluxian/squirrel-updates-server)](https://hub.docker.com/r/aluxian/squirrel-updates-server/)
+
 A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases. It also has an endpoint for Linux.
 
 The server doesn't do any caching, and its responses don't include caching headers. Use a service like CloudFlare to cache requests and minimise load.
