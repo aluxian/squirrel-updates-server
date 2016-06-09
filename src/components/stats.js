@@ -2,10 +2,7 @@ import {getAllReleases} from '../components/github';
 import config from '../config';
 
 async function get() {
-  let releases = await getAllReleases();
-
-  // Exclude drafts
-  releases = releases.filter(release => !release.draft);
+  const releases = await getAllReleases();
 
   let downloadsTotal = 0;
   let downloadsByFile = {};
