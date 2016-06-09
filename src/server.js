@@ -11,11 +11,20 @@ import * as downloadCtrl from './controllers/download';
 import * as statsCtrl from './controllers/stats';
 import * as badgeCtrl from './controllers/badge';
 
+import manifest from '../package.json';
+
 const app = express();
+let ravenClient = null;
+
+if (config.sentry && config.sentry.dsn) {
+  ravenClient = new raven.Client(config.sentry.dsn, {
+    release: manifest.version
+  });
+}
 
 app.use(morgan('common'));
-if (config.sentry && config.sentry.dsn) {
-  app.use(raven.middleware.express.requestHandler(config.sentry.dsn));
+if (ravenClient) {
+  app.use(raven.middleware.express.requestHandler(ravenClient));
 }
 
 app.get('/', asyncHandler(homeCtrl.main));
@@ -33,8 +42,8 @@ app.get('/stats', asyncHandler(statsCtrl.main));
 app.get('/badge/:type.svg', asyncHandler(badgeCtrl.main));
 
 app.use(errorHandler1);
-if (config.sentry && config.sentry.dsn) {
-  app.use(raven.middleware.express.errorHandler(config.sentry.dsn));
+if (ravenClient) {
+  app.use(raven.middleware.express.errorHandler(ravenClient));
 }
 app.use(errorHandler2);
 
