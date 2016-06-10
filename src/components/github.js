@@ -23,7 +23,7 @@ function getReleasesByPage(page, callback) {
       // Exclude drafts
       result = result && result.filter(r => !r.draft) || [];
 
-      if (result.meta.link && result.meta.link.includes('rel="next"')) {
+      if (result.meta && result.meta.link && result.meta.link.includes('rel="next"')) {
         getReleasesByPage(page + 1, function(err2, releases) {
           if (err2) callback(err2);
           else callback(null, result.concat(releases));
@@ -59,7 +59,7 @@ function getLatestReleaseForChannel(channel, page, callback) {
 
       if (release) {
         callback(null, release);
-      } else if (releases.meta.link && releases.meta.link.includes('rel="next"')) {
+      } else if (releases.meta && releases.meta.link && releases.meta.link.includes('rel="next"')) {
         getLatestReleaseForChannel(channel, page + 1, callback);
       } else {
         callback(null, null);
