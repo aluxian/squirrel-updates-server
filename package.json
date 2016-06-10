@@ -47,6 +47,8 @@
     "semver": "5.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "6.0.4",
+    "eslint": "2.11.1",
     "nodemon": "1.9.1"
   }
 }
