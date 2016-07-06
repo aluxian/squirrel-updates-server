@@ -32,33 +32,68 @@ async function get() {
       if (!downloadsByFile[asset.name]) downloadsByFile[asset.name] = 0;
       downloadsByFile[asset.name] += asset.download_count;
 
-      if (asset.name.match(config.patterns.darwin.dmg)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.darwin.dmg += asset.download_count;
-      } else if (asset.name.match(config.patterns.darwin.zip)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.darwin.zip += asset.download_count;
-      } else if (asset.name.match(config.patterns.win32.installer)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.win32.installer += asset.download_count;
-      } else if (asset.name.match(config.patterns.win32.zip)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.win32.portable += asset.download_count;
-      } else if (asset.name.match(config.patterns.linux.deb.i386)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.linux.deb.i386 += asset.download_count;
-      } else if (asset.name.match(config.patterns.linux.deb.amd64)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.linux.deb.amd64 += asset.download_count;
-      } else if (asset.name.match(config.patterns.linux.rpm.i386)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.linux.rpm.i386 += asset.download_count;
-      } else if (asset.name.match(config.patterns.linux.rpm.x86_64)) {
-        downloadsByVersionR[version] += asset.download_count;
-        downloadsByPlatform.linux.rpm.x86_64 += asset.download_count;
-      } else {
-        downloadsByPlatform.undetected += asset.download_count;
+      const patterns = config.patterns;
+      if (!patterns) {
+        return;
       }
+
+      if (patterns.darwin) {
+        if (patterns.darwin.dmg && asset.name.match(patterns.darwin.dmg)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.darwin.dmg += asset.download_count;
+          return;
+        }
+
+        if (patterns.darwin.zip && asset.name.match(patterns.darwin.zip)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.darwin.zip += asset.download_count;
+          return;
+        }
+      }
+
+      if (patterns.win32) {
+        if (patterns.win32.installer && asset.name.match(patterns.win32.installer)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.win32.installer += asset.download_count;
+          return;
+        }
+
+        if (patterns.win32.zip && asset.name.match(patterns.win32.zip)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.win32.portable += asset.download_count;
+          return;
+        }
+      }
+
+      if (patterns.linux && patterns.linux.deb) {
+        if (patterns.linux.deb.i386 && asset.name.match(patterns.linux.deb.i386)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.linux.deb.i386 += asset.download_count;
+          return;
+        }
+
+        if (patterns.linux.deb.amd64 && asset.name.match(patterns.linux.deb.amd64)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.linux.deb.amd64 += asset.download_count;
+          return;
+        }
+      }
+
+      if (patterns.linux && patterns.linux.rpm) {
+        if (patterns.linux.rpm.i386 && asset.name.match(patterns.linux.rpm.i386)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.linux.rpm.i386 += asset.download_count;
+          return;
+        }
+
+        if (patterns.linux.rpm.x86_64 && asset.name.match(patterns.linux.rpm.x86_64)) {
+          downloadsByVersionR[version] += asset.download_count;
+          downloadsByPlatform.linux.rpm.x86_64 += asset.download_count;
+          return;
+        }
+      }
+
+      downloadsByPlatform.undetected += asset.download_count;
     });
   });
 
