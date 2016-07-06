@@ -6,8 +6,8 @@ import config from '../config';
 import semver from 'semver';
 
 export async function darwin(req, res) {
-  const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
+  const channel = req.params.channel || config.channels[0];
+  if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const version = req.query.version;
   if (!semver.valid(version)) throw new BadRequestError(`Invalid version '${version}'.`);
@@ -41,8 +41,8 @@ export async function darwin(req, res) {
 }
 
 export async function win32_portable(req, res) {
-  const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
+  const channel = req.params.channel || config.channels[0];
+  if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new NotFoundError('Latest release not found.');
@@ -65,8 +65,8 @@ export async function win32_portable(req, res) {
 }
 
 export async function win32_file(req, res) {
-  const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
+  const channel = req.params.channel || config.channels[0];
+  if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const fileName = req.params.file;
   if (!fileName) throw new BadRequestError(`Invalid file '${fileName}'.`);
@@ -97,8 +97,8 @@ export async function win32_file(req, res) {
 }
 
 export async function linux(req, res) {
-  const channel = req.params.channel || 'dev';
-  if (!['stable', 'beta', 'dev'].includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
+  const channel = req.params.channel || config.channels[0];
+  if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
   const arch = req.query.arch || '';
   const pkg = req.query.pkg || '';

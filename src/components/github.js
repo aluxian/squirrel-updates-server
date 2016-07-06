@@ -47,14 +47,11 @@ function getLatestReleaseForChannel(channel, page, callback) {
       // Exclude drafts
       releases = releases && releases.filter(r => !r.draft) || [];
 
-      const invertedChannels = {
-        dev: [],
-        beta: ['dev'],
-        stable: ['beta', 'dev']
-      };
-
+      const channelIndex = config.channels.indexOf(channel);
       const release = releases.find(release => {
-        return !invertedChannels[channel].find(ic => release.name.includes(ic));
+        const releaseChannel = config.channels.find(c => release.name.includes(c)) || config.defaultChannel;
+        const releaseChannelIndex = config.channels.indexOf(releaseChannel);
+        return channelIndex <= releaseChannelIndex;
       });
 
       if (release) {
@@ -90,8 +87,8 @@ export function getReleaseByTag(tag) {
   });
 }
 
-export function getLatestRelease(channel = 'dev') {
-  if (channel == 'dev') {
+export function getLatestRelease(channel = config.channels[0]) {
+  if (channel == config.channels[0]) {
     // Request the latest release directly
     return new Promise(function(resolve, reject) {
       github.repos.getLatestRelease({
