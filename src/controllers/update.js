@@ -65,6 +65,8 @@ export async function win32_portable(req, res) {
 }
 
 export async function win32_file(req, res) {
+  const clientLocalVersion = req.query.localVersion;
+
   const channel = req.params.channel || config.channels[0];
   if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
@@ -83,6 +85,12 @@ export async function win32_file(req, res) {
     // Download from the latest release
     release = await getLatestRelease(channel);
     if (!release) throw new NotFoundError('Latest release not found.');
+
+    // If it's older than the already instaled version, return the same release
+    if (clientLocalVersion && semver.lt(release.tag_name, clientLocalVersion)) {
+      release = await getReleaseByTag('v' + clientLocalVersion);
+      if (!release) throw new NotFoundError('Release for tag v' + clientLocalVersion + ' not found.');
+    }
   }
 
   const asset = release.assets.find(a => a.name === fileName);
