@@ -38,5 +38,6 @@ export default {
   },
   mirrors: process.env.MIRROR_NAMES,
   channels: ['dev', 'beta', 'stable'],
-  defaultChannel: 'stable'
+  defaultChannel: 'stable',
+  downloadsCountOffset: process.env.DOWNLOADS_COUNT_OFFSET || 0
 };
