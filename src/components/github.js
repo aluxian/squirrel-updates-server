@@ -23,6 +23,9 @@ function getReleasesByPage(page, callback) {
       // Exclude drafts
       result = result && result.filter(r => !r.draft) || [];
 
+      // Exclude prereleases
+      result = result && result.filter(r => !r.prerelease) || [];
+
       if (result.meta && result.meta.link && result.meta.link.includes('rel="next"')) {
         getReleasesByPage(page + 1, function(err2, releases) {
           if (err2) callback(err2);
@@ -46,6 +49,9 @@ function getLatestReleaseForChannel(channel, page, callback) {
     } else {
       // Exclude drafts
       releases = releases && releases.filter(r => !r.draft) || [];
+
+      // Exclude prereleases
+      releases = releases && releases.filter(r => !r.prerelease) || [];
 
       const channelIndex = config.channels.indexOf(channel);
       const release = releases.find(release => {
