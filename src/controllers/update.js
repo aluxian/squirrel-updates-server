@@ -75,7 +75,6 @@ export async function win32_file(req, res) {
 
   // Try to guess the file version
   const fileVersion = (fileName.match(/\d+\.\d+\.\d+(-\w*(\.?\d+)?)?/) || [])[0] || null;
-
   let release = null;
 
   if (fileVersion) {

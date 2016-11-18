@@ -1,8 +1,8 @@
 export default {
-  port: process.env.UPDATES_PORT || process.env.PORT || 3000,
-  host: process.env.UPDATES_HOST || '0.0.0.0',
+  port: 80,
+  host: '0.0.0.0',
   github: {
-    token: process.env.GITHUB_TOKEN,
+    token: 'a68d0454e744b2159f0b46e1c0d4e5a09572f08a',
     api: {
       version: '3.0.0',
       headers: {
@@ -13,30 +13,30 @@ export default {
   sentry: {
     dsn: process.env.SENTRY_DSN
   },
-  user: process.env.REPO_OWNER || 'Aluxian',
-  repo: process.env.REPO_NAME || 'Whatsie',
-  privateRepo: process.env.UPDATES_PRIVATE_REPO || false,
+  user: '4thOffice',
+  repo: 'brisket',
+  privateRepo: true,
   patterns: {
     darwin: {
-      dmg: /-osx\.dmg/,
-      zip: /-osx\.zip/
+      dmg: /\.dmg/,
+      zip: /-mac\.zip/
     },
     win32: {
-      installer: /-win32-setup\.exe/,
-      zip: /-win32-portable\.zip/
+      installer: /\.exe/,
+      zip: /-win32\.zip/
     },
     linux: {
       deb: {
         i386: /-linux-i386\.deb/,
-        amd64: /-linux-amd64\.deb/
+        amd64: /\.deb/
       },
       rpm: {
         i386: /-linux-i386\.rpm/,
-        x86_64: /-linux-x86_64\.rpm/
+        x86_64: /\.rpm/
       }
     }
   },
   mirrors: process.env.MIRROR_NAMES,
-  channels: ['dev', 'beta', 'stable'],
+  channels: ['stable', 'beta', 'test'],
   defaultChannel: 'stable'
 };

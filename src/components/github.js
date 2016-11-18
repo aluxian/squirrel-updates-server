@@ -81,6 +81,7 @@ export function getReleaseByTag(tag) {
       repo: config.repo,
       tag: tag
     }, function(err, release) {
+      //console.log(err, release, tag);
       if (err) reject(err);
       else resolve(release);
     });
