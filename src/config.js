@@ -37,6 +37,6 @@ export default {
     }
   },
   mirrors: process.env.MIRROR_NAMES,
-  channels: ['stable', 'beta', 'test'],
+  channels: ['stable', 'beta', 'alpha', 'test'],
   defaultChannel: 'stable'
 };
