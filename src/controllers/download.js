@@ -54,7 +54,7 @@ export async function latestMirror(req, res) {
   const mirrors = (config.mirrors || '').split(',');
   if (!mirrors.includes(mirror)) throw new NotFoundError(`Mirror '${mirror}' not found.`);
 
-  const platform = req.query.platform;
+  const platform = req.query.platform || 'win32';
   if (!['darwin', 'win32'].includes(platform)) throw new BadRequestError(`Invalid platform '${platform}'.`);
 
   const mirrorUrl = process.env['MIRROR_URL_' + mirror.toUpperCase()];
