@@ -7,7 +7,9 @@ export default {
       version: '3.0.0',
       headers: {
         'user-agent': 'Aluxian/squirrel-updates-server'
-      }
+      },
+      host: process.env.GITHUB_HOST,
+      pathPrefix: process.env.GITHUB_PATH_PREFIX
     }
   },
   sentry: {
