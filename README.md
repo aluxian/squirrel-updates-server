@@ -4,7 +4,8 @@
 
 A simple node.js server for Squirrel.Mac and Squirrel.Windows which uses GitHub releases. It also has an endpoint for Linux.
 
-The server doesn't do any caching, and its responses don't include caching headers. Use a service like CloudFlare to cache requests and minimise load.
+> The server doesn't do any caching, and its responses don't include caching headers. Use a service like CloudFlare to cache requests and minimise load.
+> CHANGED: From v0.6, I added server-side caching.
 
 > Make sure you tag your releases as `vX.X.X` and not just `X.X.X`.
 

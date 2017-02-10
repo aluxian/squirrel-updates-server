@@ -1,4 +1,5 @@
 import express from 'express';
+import apicache from 'apicache';
 import morgan from 'morgan';
 import raven from 'raven';
 
@@ -27,19 +28,23 @@ if (ravenClient) {
   app.use(raven.middleware.express.requestHandler(ravenClient));
 }
 
-app.get('/', asyncHandler(homeCtrl.main));
-app.get('/update/darwin', asyncHandler(updateCtrl.darwin));
-app.get('/update/win32/portable', asyncHandler(updateCtrl.win32_portable));
-app.get('/update/win32/:file', asyncHandler(updateCtrl.win32_file));
-app.get('/update/linux', asyncHandler(updateCtrl.linux));
-app.get('/update/:channel/darwin', asyncHandler(updateCtrl.darwin));
-app.get('/update/:channel/win32/portable', asyncHandler(updateCtrl.win32_portable));
-app.get('/update/:channel/win32/:file', asyncHandler(updateCtrl.win32_file));
-app.get('/update/:channel/linux', asyncHandler(updateCtrl.linux));
+const cache = () => {
+  return apicache.middleware(config.cacheTTL);
+};
+
+app.get('/', cache(), asyncHandler(homeCtrl.main));
+app.get('/update/darwin', cache(), asyncHandler(updateCtrl.darwin));
+app.get('/update/win32/portable', cache(), asyncHandler(updateCtrl.win32_portable));
+app.get('/update/win32/:file', cache(), asyncHandler(updateCtrl.win32_file));
+app.get('/update/linux', cache(), asyncHandler(updateCtrl.linux));
+app.get('/update/:channel/darwin', cache(), asyncHandler(updateCtrl.darwin));
+app.get('/update/:channel/win32/portable', cache(), asyncHandler(updateCtrl.win32_portable));
+app.get('/update/:channel/win32/:file', cache(), asyncHandler(updateCtrl.win32_file));
+app.get('/update/:channel/linux', cache(), asyncHandler(updateCtrl.linux));
 app.get('/download/mirror/:mirror/latest', asyncHandler(downloadCtrl.latestMirror));
-app.get('/download/:platform/latest', asyncHandler(downloadCtrl.latest));
-app.get('/stats', asyncHandler(statsCtrl.main));
-app.get('/badge/:type.svg', asyncHandler(badgeCtrl.main));
+app.get('/download/:platform/latest', cache(), asyncHandler(downloadCtrl.latest));
+app.get('/stats', cache(), asyncHandler(statsCtrl.main));
+app.get('/badge/:type.svg', cache(), asyncHandler(badgeCtrl.main));
 
 app.use(errorHandler1);
 if (ravenClient) {
