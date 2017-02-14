@@ -73,8 +73,10 @@ export async function win32_file(req, res) {
   const fileName = req.params.file;
   if (!fileName) throw new BadRequestError(`Invalid file '${fileName}'.`);
 
+  const channelStr = `(${config.channels.join('|')})`;
+  const versionRegex = new RegExp(`\\d+\\.\\d+\\.\\d+(-${channelStr}(-\\d+)?)?`)
   // Try to guess the file version
-  const fileVersion = (fileName.match(/\d+\.\d+\.\d+/) || [])[0] || null;
+  const fileVersion = (fileName.match(versionRegex) || [])[0] || null;
   let release = null;
 
   if (fileVersion) {
