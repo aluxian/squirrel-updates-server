@@ -6,6 +6,10 @@ import {getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 
 export async function latest(req, res) {
+
+  const channel = req.params.channel || config.defaultChannel;
+  if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
+
   const platform = req.params.platform;
   if (!['darwin', 'win32', 'linux'].includes(platform)) throw new BadRequestError(`Invalid platform '${platform}'.`);
 
@@ -18,7 +22,7 @@ export async function latest(req, res) {
     if (!['deb', 'rpm'].includes(pkg)) throw new BadRequestError(`Invalid pkg '${pkg}'.`);
   }
 
-  const latestRelease = await getLatestRelease();
+  const latestRelease = await getLatestRelease(channel);
   if (!latestRelease) throw new NotFoundError('Latest release not found.');
 
   let asset = null;
