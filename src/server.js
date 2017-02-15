@@ -43,6 +43,7 @@ app.get('/update/:channel/win32/:file', cache(), asyncHandler(updateCtrl.win32_f
 app.get('/update/:channel/linux', cache(), asyncHandler(updateCtrl.linux));
 app.get('/download/mirror/:mirror/latest', asyncHandler(downloadCtrl.latestMirror));
 app.get('/download/:platform/latest', cache(), asyncHandler(downloadCtrl.latest));
+app.get('/download/:platform/latest/:channel', cache(), asyncHandler(downloadCtrl.latest));
 app.get('/stats', cache(), asyncHandler(statsCtrl.main));
 app.get('/badge/:type.svg', cache(), asyncHandler(badgeCtrl.main));
 
