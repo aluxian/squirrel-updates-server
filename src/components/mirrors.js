@@ -20,6 +20,7 @@ export async function downloadMirror(url, platform, headers) {
           json = JSON.parse(res.body);
         } catch (ex) {
           reject(ex);
+          console.log('could not parse mirror json:', res.body);
           json = null;
         }
 
