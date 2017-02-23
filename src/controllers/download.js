@@ -6,7 +6,6 @@ import {getLatestRelease, getPublicDownloadUrl} from '../components/github';
 import config from '../config';
 
 export async function latest(req, res) {
-
   const channel = req.params.channel || config.defaultChannel;
   if (!config.channels.includes(channel)) throw new BadRequestError(`Invalid channel '${channel}'.`);
 
