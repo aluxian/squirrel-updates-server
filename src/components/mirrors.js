@@ -20,6 +20,11 @@ export async function downloadMirror(url, platform, headers) {
           json = JSON.parse(res.body);
         } catch (ex) {
           reject(ex);
+          if (global.ravenClient && ravenClient.captureException) {
+            const e2 = new Error(res.body);
+            e2.res = res;
+            ravenClient.captureException(e2);
+          }
           console.log('could not parse mirror json:', res.body);
           json = null;
         }
