@@ -21,6 +21,7 @@ if (config.sentry && config.sentry.dsn) {
   ravenClient = new raven.Client(config.sentry.dsn, {
     release: manifest.version
   });
+  global.ravenClient = ravenClient;
 }
 
 app.use(morgan('common'));
