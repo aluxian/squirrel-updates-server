@@ -29,6 +29,12 @@ if (ravenClient) {
   app.use(raven.middleware.express.requestHandler(ravenClient));
 }
 
+// apicache does not cache headers on redirects, so do not cache if configured appropriately
+if (config.cacheIgnoreRedirects && config.cacheIgnoreRedirects == true) {
+    let cacheOptions = apicache.options();
+    cacheOptions.statusCodes.exclude = [301, 302];
+    apicache.options(cacheOptions);
+}
 const cache = () => {
   return apicache.middleware(config.cacheTTL);
 };
