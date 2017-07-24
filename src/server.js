@@ -30,7 +30,7 @@ if (ravenClient) {
 }
 
 // apicache does not cache headers on redirects, so do not cache if configured appropriately
-if (config.cacheIgnoreRedirects && config.cacheIgnoreRedirects == true) {
+if (config.cacheIgnoreRedirects) {
     let cacheOptions = apicache.options();
     cacheOptions.statusCodes.exclude = [301, 302];
     apicache.options(cacheOptions);
