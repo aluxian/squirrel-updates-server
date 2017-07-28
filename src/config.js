@@ -44,5 +44,6 @@ export default {
   downloadsCountOffset: parseInt(process.env.DOWNLOADS_COUNT_OFFSET || '0') || 0,
   excludeDrafts: JSON.parse(process.env.EXCLUDE_DRAFTS || 'true'),
   excludePrereleases: JSON.parse(process.env.EXCLUDE_PRERELEASES || 'false'),
-  cacheTTL: '2 hours'
+  cacheTTL: '2 hours',
+  cacheIgnoreRedirects: true
 };
